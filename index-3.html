@@ -1,0 +1,183 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Paving Inspection & Corrective Action</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f3f2ee;--card:#fff;--ink:#1d1f21;--mut:#666b70;--line:#d4d2ca;--acc:#f2b705;--accink:#1d1f21;--ok:#2e7d4f;--bad:#c0392b;--warn:#b7791f}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17181a;--card:#222426;--ink:#ecebe6;--mut:#9a9fa4;--line:#3a3d40;--ok:#5cc58a;--bad:#ff7a6b;--warn:#e8b04a}}
+:root[data-theme="dark"]{--bg:#17181a;--card:#222426;--ink:#ecebe6;--mut:#9a9fa4;--line:#3a3d40;--ok:#5cc58a;--bad:#ff7a6b;--warn:#e8b04a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{background:#1d1f21;color:#f3f2ee;padding:18px 16px;border-bottom:6px solid var(--acc)}
+header h1{margin:0;font-size:1.35rem;font-weight:800;letter-spacing:.2px}header p{margin:4px 0 0;color:#b9bcbf;font-size:.9rem}
+main{max-width:860px;margin:0 auto;padding:12px}
+section{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px;margin:12px 0}
+h2{margin:0 0 10px;font-size:1.1rem}h3{margin:14px 0 6px;font-size:.95rem;color:var(--mut)}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+label{display:block;font-size:.82rem;color:var(--mut);margin-bottom:3px}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:9px}
+textarea{min-height:60px;resize:vertical}
+.item{border-top:1px solid var(--line);padding:10px 0}.item:first-of-type{border-top:0}
+.q{font-weight:600}.hint{font-size:.82rem;color:var(--mut)}
+.seg{display:flex;gap:6px;margin:6px 0;flex-wrap:wrap}
+.seg button{flex:1;min-width:84px;padding:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:6px;font:inherit;font-weight:600;cursor:pointer}
+.seg button.on.good{background:var(--ok);color:#fff;border-color:var(--ok)}
+.seg button.on.fix{background:var(--bad);color:#fff;border-color:var(--bad)}
+.seg button.on.na{background:var(--mut);color:#fff;border-color:var(--mut)}
+.delays{display:grid;gap:8px}.d{border:1px solid var(--line);border-radius:6px;padding:8px 10px}
+.d.on{border-color:var(--warn);background:color-mix(in srgb,var(--warn) 12%,var(--card))}
+.d label.t{display:flex;gap:8px;align-items:center;color:var(--ink);font-size:1rem;margin:0}.d label.t input{width:auto}
+.d .more{display:none;grid-template-columns:110px 1fr;gap:8px;margin-top:8px}.d.on .more{display:grid}
+.btn{background:var(--acc);color:var(--accink);border:0;border-radius:6px;padding:11px 16px;font:inherit;font-weight:700;cursor:pointer}
+.btn.sec{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.ca{border:1px solid var(--line);border-left:6px solid var(--bad);border-radius:6px;padding:10px;margin:10px 0;background:var(--bg)}
+.ca.done{border-left-color:var(--ok)}
+.thumbs{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.thumbs img{width:76px;height:76px;object-fit:cover;border-radius:6px;border:1px solid var(--line)}
+.score{font-size:2rem;font-weight:800}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.empty{color:var(--mut);padding:8px 0}
+.wc{display:flex;gap:8px;align-items:center;color:var(--ink);font-size:1rem;margin:0}.wc input{width:auto}
+.load{border:1px solid var(--line);border-radius:6px;padding:8px;margin:8px 0}.load.cold{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--card))}
+#sig{width:100%;height:130px;background:#fff;border:1px solid var(--line);border-radius:6px;touch-action:none;display:block}
+body.quick .fullonly{display:none}
+.g3{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.shout{border:2px solid var(--acc);background:color-mix(in srgb,var(--acc) 9%,var(--card))}.so{border:1px solid var(--line);border-radius:6px;padding:10px;margin:8px 0;background:var(--card)}
+.slot{border:1px dashed var(--line);border-radius:6px;padding:8px}.slot.ok{border-style:solid;border-color:var(--ok)}.miss{color:var(--bad)}#fin{margin-top:10px}
+@media print{header{border-bottom:3px solid #000}.seg button:not(.on),.btn,.noprint{display:none!important}body{background:#fff;color:#000}section{break-inside:avoid}}
+</style></head><body>
+<header><h1>Paving Project Inspection &amp; Corrective Action</h1><p>Walk the job. Mark what you see. Anything marked Needs Fix becomes a corrective action.</p></header>
+<main>
+<section><h2>Which inspection?</h2><div class="seg" id="modes"><button class="good" data-mode="quick">Quick walk</button><button class="good" data-mode="full">Full inspection</button></div><div class="hint" id="modeHint"></div></section>
+<section><h2>Project</h2><div class="g">
+<div><label>Job / customer</label><input id="job"></div>
+<div><label>Job #</label><input id="jobno"></div>
+<div><label>Date inspected</label><input id="date" type="date"></div>
+<div><label>Inspector</label><input id="insp"></div>
+<div><label>Crew lead</label><input id="lead"></div>
+<div><label>Corrective action lead this week</label><input id="calead"></div>
+<div><label>Inspection type</label><select id="itype"><option>At the end of the job</option><option>Day-of (end of shift)</option><option>Next-day walk</option><option>30-day recheck</option><option>Customer complaint</option></select></div>
+<div><label>Work type</label><select id="wtype"><option>Overlay</option><option>Mill &amp; fill</option><option>New / full-depth</option><option>Patching</option><option>Seal coat / crack fill</option></select></div>
+<div class="g3"><div><label>Air temp °F</label><input id="air" type="number" inputmode="numeric"></div><div><label>Mat temp °F</label><input id="mat" type="number" inputmode="numeric"></div><div><label>Tons placed</label><input id="tons" type="number" inputmode="decimal"></div></div>
+</div></section>
+<section><h2>Inspection checklist</h2><div id="escb" class="miss" style="font-weight:600;margin-bottom:8px"></div><div id="chk"></div></section>
+<section><h2>Proof you looked</h2><p class="hint">Take each photo of the real spot, then answer the question by going and looking.</p><div class="g" id="req"></div>
+<label style="margin-top:12px">Look-closer question</label><div class="q" id="spotq"></div><input id="spot" placeholder="Your answer, in a sentence"></section>
+<section><h2>Mix temperature check</h2><p class="hint">Check the first load of the day. Add another entry only if you switch plants or a load comes in cold. A load below your minimum turns red and becomes a corrective action.</p>
+<div class="g" style="margin-bottom:10px"><div><label>Minimum mix temp at arrival °F</label><input id="tmin" type="number" value="270"></div></div>
+<div id="loads"></div><button class="btn sec noprint" id="addload">Add another plant or cold load</button><div class="hint" id="loadsum" style="margin-top:8px"></div></section>
+<section><h2>What slowed the job down?</h2><p class="hint">Check anything that happened. Minutes lost make the trends visible.</p><div class="delays" id="dly"></div></section>
+<section><h2>Corrective actions</h2><p class="hint">Needs Fix items, cold loads and delays over 30 minutes show up here. This week's corrective action lead owns follow-through. Estimate the crew hours and say whether it was fixed on the spot or needs a return trip.</p><div id="casum" class="hint" style="margin-bottom:6px"></div><div id="cas"></div><button class="btn sec" id="addca">Add finding</button></section>
+<section><h2>Customer sign-off</h2><div class="g"><div><label>Customer name</label><input id="cname"></div><div><label>Walked the job with the customer?</label><select id="cwalk"><option>Yes</option><option>No – not available</option><option>No – declined</option></select></div></div>
+<h3>How does the customer feel about the work?</h3><div class="seg" id="csat"></div>
+<label>Customer comments or concerns</label><textarea id="ccom"></textarea>
+<label style="margin-top:8px">Customer signature</label><canvas id="sig" width="600" height="160"></canvas><button class="btn sec noprint" id="sigclr" style="margin-top:6px">Clear signature</button></section>
+<section class="shout"><h2>Shout-outs: who stepped up?</h2><p class="hint">Call out a crew member by name. Catching a problem, helping a teammate, or getting it right the first time all count.</p>
+<h3>What did we do well as a crew?</h3><div class="g" id="wellchk" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))"></div>
+<h3>Shout-outs</h3><div id="shouts"></div>
+<div class="row noprint"><button class="btn" id="addshout">Add another shout-out</button><button class="btn sec" id="editcrew">Edit crew list</button></div>
+<div id="crewed" class="noprint" style="display:none;margin-top:8px"><label>Crew names, one per line</label><textarea></textarea><button class="btn" id="crewsave" style="margin-top:6px">Save crew list</button></div>
+<label style="margin-top:12px">Other notes about the job (optional)</label><textarea id="well"></textarea></section>
+<section><h2>Result</h2><div class="row"><div><div class="score" id="score">–</div><div class="hint" id="scoreTxt">Mark items to see the score</div></div></div>
+<h3>Crew sign-off</h3><div class="g"><div><label>Crew member</label><input id="so"></div><div><label>Foreman / manager</label><input id="so2"></div></div>
+
+<div class="fullonly"><label style="margin-top:8px">What would we do differently next time?</label><textarea id="diff"></textarea></div>
+<div id="fin"></div><div class="row noprint" style="margin-top:12px"><button class="btn" id="finish">Finish inspection</button><button class="btn sec" id="print">Print / save PDF</button><button class="btn sec" id="exp">Download data</button><button class="btn sec" id="clr">New inspection</button></div></section>
+</main>
+<script>
+const CATS=[
+["Surface prep",[["Existing surface cleaned, tack coat even","No bare spots, no puddled tack, no dirt or loose material left under the mat"],["Base / milled surface sound","Soft spots, standing water or failed base fixed before paving"],["Manholes, valves and utility covers adjusted","Flush with finished surface"]]],
+["Mat appearance",[["Uniform texture, no segregation","No coarse or rocky patches, no lines across the mat from truck changes"],["No tearing, drag marks or screed streaks","Mat is closed and smooth"],["No bleeding, oil spots or burns","Consistent color across the mat"],["No cracking, checking or raveling","Look for hairline cracks from rolling too hot or too cold"]]],
+["Scarring, marks and waves",[
+["No screed marks, scarring or drag lines","Sight along the mat at a low angle. Early or late light shows flaws best"],
+["No roller marks, chatter or tire marks","Check where rollers turned, stopped or reversed"],
+["No dips, waves or washboard from the screed","Walk it and sight along it. Check after truck exchanges and paver stops"],
+["No bumps or marks where the paver stopped or started","Common at truck exchanges and end of load"],
+["No shoving or pushing from rolling","Cracks across the mat mean rolled too hot or too cold"],
+["No honeycomb or open, rocky texture","Compare to the good mat in the middle of the pass"]]],
+["Joints",[["Longitudinal joint tight and straight","No gap, no hump, no dip, no raveling at the seam"],["Pulls line up at the joint","No stagger, ragged edge, uneven overlap, or one pull higher than the next"],["Transverse / butt joints smooth","No bump when you walk or drive over it"],["Tie-ins to driveways, curbs, gutters and existing pavement","Smooth transition, no lip"]]],
+["Grade and drainage",[["Water drains, no birdbaths","Run water or check after rain. Note any ponding with a photo"],["Smooth ride, no dips or humps","Straightedge or string over suspect areas"],["Thickness and slope look right","Matches plan or customer expectation"]]],
+["Compaction",[["Roller marks and pattern acceptable","No roller marks, pushing or shoving, no missed spots"],["Edges compacted and square","Edge is firm, not crumbling"]]],
+["Edges and cleanup",[["Edge lines straight and clean","No wavy edges, no overhang onto grass or gravel"],["Shoulders and transitions finished","Gravel or fill placed where needed"],["Debris, spilled mix and tools removed","Site left cleaner than we found it"],["Customer and public looked after","Access restored, signage and cones handled, questions answered"]]],
+["General appearance",[
+["From 20 feet away it looks clean and uniform","Same color, sheen and texture across the whole job"],
+["Hand work blends with the machine mat","No humps, piles, shovel marks or patchy areas"],
+["Straight, clean lines and edges","Edges follow curbs, stalls and entrances"],
+["Would we be proud to show this to our best customer?","Honest gut check from the whole crew"]]],
+["Crew behavior and teamwork",[
+["Crew communicated during the job","Problems called out, signals or radio used, nobody left guessing"],
+["Problems were flagged when seen, not ignored","Someone spoke up about a flaw while the mix was still workable"],
+["Everyone stayed engaged and helped where needed","No one standing around while others struggled"],
+["Lead walked the mat behind the paver","Checked texture, joints and thickness during the pull, not after"],
+["Respectful tone with each other, the customer and the public","How we sounded and acted on site"],
+["Tools, equipment and the site were treated with care","No rushing, rough handling or shortcuts"]]]];
+const DELAYS=["Waiting on trucks","Cold mix / mix temperature","Equipment failure","People shortage","Weather","Plant / material shortage","Traffic control or access","Utilities or obstructions","Plan change or unclear scope","Other"];
+const CAUSES=["","Not enough people","Equipment problem","Mix temperature / cold mix","Truck timing","Rushed","Missed step in process","Unclear instructions","Surface prep","Weather","Other"];
+let S={f:{},d:{},ca:[],man:[],loads:[],cs:"",sig:"",well:{},shouts:[],mode:"quick",start:0,done:false};const QUICK=new Set(["1_0","1_1","2_1","2_2","3_0","3_1","3_2","4_0","6_0","6_2","7_0","7_3","8_1"]);
+const PHQ=["Overall mat, standing at the start","A joint, close up","An edge or the lowest spot"],PHF=["Close-up of mat texture","Cleanup and site condition","Worst area you found"];
+const SPOT=["Stand at the lowest spot on the job. Where would water go, and does it leave?","Walk the longest joint. Where is it best and where is it worst?","Kneel at the mat edge. Is the texture the same at the edge as in the middle? Describe any difference.","Find where a truck exchanged. What do you see there?","Look from the farthest corner of the job. What is the first thing that catches your eye?","Find where paving started and stopped. Is that transition smooth? What would you change?","Check around manholes, drains or utilities. How do they sit against the new mat?","Find the worst-looking square yard. What caused it?"];
+const reqph={};
+const WELL=["Crew worked together well","Clear communication all day","Showed up ready and on time","Stayed safe, nobody cut corners","Caught a problem and fixed it before leaving","Helped each other on the hard parts","Kept a positive attitude under pressure","Great customer interaction","Left the site cleaner than we found it","Took pride in the finish"];const $=id=>document.getElementById(id);let uid=0;const photos={};
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function save(){try{const t={};document.querySelectorAll("[data-f]").forEach(e=>t[e.id]=e.value);localStorage.setItem("paveInsp",JSON.stringify({S,t}))}catch(e){}}
+function load(){try{const r=JSON.parse(localStorage.getItem("paveInsp")||"null");if(r){S=r.S;Object.entries(r.t||{}).forEach(([k,v])=>{const e=$(k);if(e)e.value=v})}}catch(e){}}
+function buildChk(){let h="";CATS.forEach(([c,items],ci)=>{if(!items.some((_,ii)=>vis(ci,ii)))return;h+=`<h3>${c}</h3>`;items.forEach(([q,hint],ii)=>{if(!vis(ci,ii))return;const k=ci+"_"+ii,v=S.f[k]?.v;h+=`<div class="item"><div class="q">${q}</div><div class="hint">${hint}</div><div class="seg">${["good:Good","fix:Needs Fix","na:N/A"].map(o=>{const[a,b]=o.split(":");return`<button class="${a}${v===a?" on":""}" data-k="${k}" data-v="${a}">${b}</button>`}).join("")}</div>${v==="fix"?`<input placeholder="What is wrong and where?" value="${esc(S.f[k].n||"")}" data-note="${k}">`:""}</div>`})});$("chk").innerHTML=h;escBanner()}
+function buildDly(){$("dly").innerHTML=DELAYS.map((d,i)=>{const x=S.d[i]||{};return`<div class="d${x.on?" on":""}"><label class="t"><input type="checkbox" data-d="${i}" ${x.on?"checked":""}>${d}</label><div class="more"><input type="number" placeholder="Minutes lost" value="${x.m||""}" data-dm="${i}"><input placeholder="What happened?" value="${esc(x.n||"")}" data-dn="${i}"></div></div>`}).join("")}
+function autoCAs(){const out=[];CATS.forEach(([c,items],ci)=>items.forEach(([q],ii)=>{const k=ci+"_"+ii;if(S.f[k]?.v==="fix")out.push({id:"f"+k,finding:c+": "+q+(S.f[k].n?" – "+S.f[k].n:"")})}));DELAYS.forEach((d,i)=>{const x=S.d[i];if(x?.on&&+x.m>=30)out.push({id:"d"+i,finding:"Delay: "+d+" ("+x.m+" min)"+(x.n?" – "+x.n:"")})});
+S.loads.forEach(l=>{if(cold(l))out.push({id:"l"+l.id,finding:"Cold or rejected load: ticket "+(l.tk||"?")+" at "+(l.t||"?")+", mix "+(l.mt||"?")+"°F"+(l.n?" – "+l.n:"")})});
+if(S.cs==="na"||S.cs==="fix")out.push({id:"cust",finding:"Customer concern ("+(S.cs==="fix"?"not happy":"has concerns")+")"+($("ccom").value?": "+$("ccom").value:"")});
+return out}
+function buildCA(){const list=[...autoCAs(),...S.man.map(m=>({id:m,finding:"",man:1}))];$("cas").innerHTML=list.length?list.map(a=>{const v=S.ca[a.id]||(S.ca[a.id]={own:$("calead").value});const th=(photos[a.id]||[]).map(u=>`<img src="${u}" alt="">`).join("");return`<div class="ca${v.st==="Done"?" done":""}"><div class="q">${a.man?`<input placeholder="Describe the finding" value="${esc(v.finding||"")}" data-c="${a.id}" data-p="finding">`:esc(a.finding)}</div>
+<div class="g" style="margin-top:8px"><div><label>Severity</label><select data-c="${a.id}" data-p="sev">${["Minor","Moderate","Major – fix before leaving"].map(o=>`<option${v.sev===o?" selected":""}>${o}</option>`).join("")}</select></div>
+<div><label>Likely cause</label><select data-c="${a.id}" data-p="cause">${CAUSES.map(o=>`<option${v.cause===o?" selected":""}>${o}</option>`).join("")}</select></div>
+<div><label>Owner</label><input data-c="${a.id}" data-p="own" value="${esc(v.own||"")}"></div>
+<div><label>Due</label><input type="date" data-c="${a.id}" data-p="due" value="${v.due||""}"></div>
+<div><label>Crew hours to fix (approx.)</label><input type="number" step="0.5" min="0" inputmode="decimal" data-c="${a.id}" data-p="hrs" value="${esc(v.hrs||"")}"></div>
+<div><label>When will it be fixed?</label><select data-c="${a.id}" data-p="when">${["Not decided","Fixed on the spot","Return trip needed"].map(o=>`<option${v.when===o?" selected":""}>${o}</option>`).join("")}</select></div>
+<div><label>Happened before?</label><select data-c="${a.id}" data-p="rep">${["Not sure","Yes","No"].map(o=>`<option${v.rep===o?" selected":""}>${o}</option>`).join("")}</select></div>
+<div><label>Status</label><select data-c="${a.id}" data-p="st">${["Open","In progress","Done"].map(o=>`<option${v.st===o?" selected":""}>${o}</option>`).join("")}</select></div></div>
+<label style="margin-top:8px">Why did it happen? (ask why 3 times)</label><textarea data-c="${a.id}" data-p="why">${esc(v.why||"")}</textarea>
+<label>Fix and how we stop it next time</label><textarea data-c="${a.id}" data-p="fix">${esc(v.fix||"")}</textarea>
+<div class="noprint"><label>Photos</label><input type="file" accept="image/*" capture="environment" multiple data-ph="${a.id}"></div><div class="thumbs">${th}</div></div>`}).join(""):'<div class="empty">Nothing to fix so far.</div>';csum()}
+function csum(){const ids=[...autoCAs().map(a=>a.id),...S.man];let h=0,sp=0,rt=0;ids.forEach(id=>{const v=S.ca[id]||{};h+=parseFloat(v.hrs)||0;if(v.when==="Fixed on the spot")sp++;if(v.when==="Return trip needed")rt++});$("casum").textContent=ids.length?ids.length+" actions, about "+h+" crew hours to fix, "+sp+" fixed on the spot, "+rt+" need a return trip":""}
+function score(){const B=CATS.length-1;let g=0,f=0,bg=0,bf=0;Object.entries(S.f).forEach(([k,x])=>{const b=parseInt(k)===B;if(x.v==="good")b?bg++:g++;if(x.v==="fix")b?bf++:f++});const pct=(m,n)=>m+n?Math.round(m/(m+n)*100)+"%":"–";$("score").textContent=pct(g,f);$("scoreTxt").textContent=(g+f?"Product: "+g+" good, "+f+" need fixing. ":"Mark items to see the score. ")+(bg+bf?"Crew behavior: "+pct(bg,bf)+" ("+bf+" to work on). ":"")+(g+f&&!f?"This is the standard.":"")}
+function refresh(){buildCA();score();save()}
+document.addEventListener("click",e=>{const sr=e.target.closest("[data-srm]");if(sr){S.shouts.splice(+sr.dataset.srm,1);buildShouts();save();return}const md=e.target.closest("[data-mode]");if(md){S.mode=md.dataset.mode;setMode();buildChk();buildReq();refresh();return}const rm=e.target.closest("[data-rm]");if(rm){S.loads.splice(+rm.dataset.rm,1);buildLoads();refresh();return}const cs=e.target.closest("[data-cs]");if(cs){S.cs=cs.dataset.cs;buildCS();refresh();return}const b=e.target.closest("[data-k]");if(b){const k=b.dataset.k;S.f[k]={...(S.f[k]||{}),v:b.dataset.v};buildChk();refresh()}});
+document.addEventListener("input",e=>{const t=e.target;if(t.dataset.si!==undefined){S.shouts[t.dataset.si][t.dataset.sp]=t.value;if(t.dataset.sp==="who")buildShouts();save();return}if(t.dataset.rp!==undefined){const f=t.files[0];if(f){const r=new FileReader();r.onload=()=>{reqph[+t.dataset.rp]=r.result;buildReq()};r.readAsDataURL(f)}return}if(t.dataset.w!==undefined){S.well[t.dataset.w]=t.checked;save();return}if(t.dataset.li!==undefined){const l=S.loads[t.dataset.li];l[t.dataset.lp]=t.value;t.closest(".load").classList.toggle("cold",cold(l));sum();clearTimeout(window._t);window._t=setTimeout(refresh,600);return}if(t.dataset.note){S.f[t.dataset.note].n=t.value;save();return}
+if(t.dataset.d!==undefined){const i=t.dataset.d;S.d[i]={...(S.d[i]||{}),on:t.checked};buildDly();refresh();return}
+if(t.dataset.dm!==undefined){S.d[t.dataset.dm].m=t.value;clearTimeout(window._t);window._t=setTimeout(refresh,500);return}
+if(t.dataset.dn!==undefined){S.d[t.dataset.dn].n=t.value;save();return}
+if(t.dataset.c){S.ca[t.dataset.c][t.dataset.p]=t.value;if(t.dataset.p==="st"||t.dataset.p==="sev")refresh();else{save();csum()}return}
+if(t.dataset.ph){[...t.files].forEach(f=>{const r=new FileReader();r.onload=()=>{(photos[t.dataset.ph]=photos[t.dataset.ph]||[]).push(r.result);buildCA()};r.readAsDataURL(f)});return}
+if(t.dataset.f!==undefined){if(t.id==="date")S.dateEdited=true;save();if(t.id==="date"||t.id==="jobno"||t.id==="job")buildSpot();if(t.id==="tmin"){buildLoads();refresh()}if(t.id==="ccom"){clearTimeout(window._t);window._t=setTimeout(refresh,600)}}});
+$("addca").onclick=()=>{S.man.push("m"+Date.now()+(uid++));refresh()};
+$("print").onclick=()=>window.print();
+$("exp").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify({S,job:$("job").value,date:$("date").value},null,1)],{type:"application/json"}));a.download="inspection-"+($("date").value||"draft")+".json";a.click()};
+$("clr").onclick=()=>{const b=$("clr");if(b.dataset.arm){try{localStorage.removeItem("paveInsp")}catch(e){}location.reload();return}b.dataset.arm=1;b.textContent="Tap again to clear this form";setTimeout(()=>{delete b.dataset.arm;b.textContent="New inspection"},4000)};
+document.querySelectorAll("input:not([type=file]):not([data-k]),select,textarea").forEach(e=>{if(e.id)e.dataset.f=1});
+function sum(){const n=S.loads.length,c=S.loads.filter(l=>cold(l)).length;$("loadsum").textContent=n?n+" entries logged, "+c+" cold or rejected":""}
+function buildLoads(){$("loads").innerHTML=S.loads.length?S.loads.map((l,i)=>`<div class="load${cold(l)?" cold":""}"><div class="g"><div><label>Time</label><input type="time" value="${l.t||""}" data-li="${i}" data-lp="t"></div><div><label>Plant / supplier</label><input value="${esc(l.pl||"")}" data-li="${i}" data-lp="pl"></div><div><label>Truck / ticket #</label><input value="${esc(l.tk||"")}" data-li="${i}" data-lp="tk"></div><div><label>Mix temp at arrival °F</label><input type="number" inputmode="numeric" value="${l.mt||""}" data-li="${i}" data-lp="mt"></div><div><label>Mat temp behind screed °F</label><input type="number" inputmode="numeric" value="${l.ma||""}" data-li="${i}" data-lp="ma"></div><div><label>Result</label><select data-li="${i}" data-lp="st">${["Placed OK","Placed – cold","Rejected","Waited / held"].map(o=>`<option${l.st===o?" selected":""}>${o}</option>`).join("")}</select></div></div><input style="margin-top:8px" placeholder="Notes (crusted, steaming, waited how long)" value="${esc(l.n||"")}" data-li="${i}" data-lp="n"><button class="btn sec noprint" data-rm="${i}" style="margin-top:8px">Remove entry</button></div>`).join(""):'<div class="empty">No entries yet.</div>';sum()}
+function buildCS(){$("csat").innerHTML=[["good","Happy"],["na","Has concerns"],["fix","Not happy"]].map(([a,b])=>`<button class="${a}${S.cs===a?" on":""}" data-cs="${a}">${b}</button>`).join("")}
+let cx;function initSig(){const cv=$("sig");cx=cv.getContext("2d");cx.lineWidth=2.5;cx.lineCap="round";cx.strokeStyle="#000";if(S.sig){const im=new Image();im.onload=()=>cx.drawImage(im,0,0);im.src=S.sig}let dr=false;const pos=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height]};
+cv.addEventListener("pointerdown",e=>{dr=true;cx.beginPath();cx.moveTo(...pos(e));cv.setPointerCapture(e.pointerId)});
+cv.addEventListener("pointermove",e=>{if(dr){cx.lineTo(...pos(e));cx.stroke()}});
+cv.addEventListener("pointerup",()=>{dr=false;S.sig=cv.toDataURL();save()});
+$("sigclr").onclick=()=>{cx.clearRect(0,0,cv.width,cv.height);S.sig="";save()}}
+$("addload").onclick=()=>{S.loads.push({id:Date.now()+(uid++),st:"Placed OK",t:new Date().toTimeString().slice(0,5)});buildLoads();refresh()};
+$("exp").onclick=()=>{const t={};document.querySelectorAll("[data-f]").forEach(e=>t[e.id]=e.value);const nm=($("jobno").value||$("job").value||"job").replace(/[^a-z0-9]+/gi,"-");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify({fields:t,S},null,1)],{type:"application/json"}));a.download="inspection-"+nm+"-"+($("date").value||"draft")+".json";a.click()};
+const vis=(ci,ii)=>S.mode==="full"||QUICK.has(ci+"_"+ii);
+const PH=()=>S.mode==="full"?[...PHQ,...PHF]:PHQ;
+function escBanner(){const bad=S.mode==="quick"&&[...QUICK].some(k=>S.f[k]?.v==="fix");$("escb").innerHTML=bad?'You marked a problem. Switch to the full inspection to check this area in detail. <button class="btn" data-mode="full">Switch to Full inspection</button>':""}
+function setMode(){document.body.classList.toggle("quick",S.mode==="quick");document.querySelectorAll("#modes [data-mode]").forEach(b=>b.classList.toggle("on",b.dataset.mode===S.mode));$("modeHint").textContent=S.mode==="quick"?"Quick walk: "+QUICK.size+" checks, 3 photos, 1 look-closer question. About 5 minutes. Use this for every job except the day's full inspection.":"Full inspection: every check, 6 photos, 1 look-closer question. Do one per paving day, on the first job, or on any job with a problem."}
+function buildReq(){$("req").innerHTML=PH().map((n,i)=>`<div class="slot${reqph[i]?" ok":""}"><label>${n}</label>${reqph[i]?`<img src="${reqph[i]}" alt="" style="width:100%;max-height:120px;object-fit:cover;border-radius:6px;margin-bottom:6px">`:""}<input type="file" accept="image/*" capture="environment" data-rp="${i}"></div>`).join("")}
+function buildSpot(){const d=($("date").value||"")+($("jobno").value||$("job").value||"");let h=0;for(const c of d)h=(h*31+c.charCodeAt(0))%9973;S.spotq=SPOT[h%SPOT.length];$("spotq").textContent=S.spotq}
+function finish(){const m=[];if(!$("insp").value.trim())m.push("Inspector name");if(!$("job").value.trim()&&!$("jobno").value.trim())m.push("Job name or number");let u=0;CATS.forEach((c,ci)=>c[1].forEach((_,ii)=>{if(vis(ci,ii)&&!S.f[ci+"_"+ii]?.v)u++}));if(u)m.push(u+" checklist items not marked");PH().forEach((n,i)=>{if(!reqph[i])m.push("Photo: "+n)});if(!$("spot").value.trim())m.push("Look-closer answer");if($("cwalk").value==="Yes"&&!S.cs)m.push("Customer rating");const f=$("fin");if(m.length){S.done=false;f.innerHTML='<div class="miss"><b>Not finished yet. Still needed:</b><br>'+m.map(x=>"• "+esc(x)).join("<br>")+"</div>";return}const mins=Math.max(1,Math.round((Date.now()-S.start)/60000));S.done=true;S.mins=mins;S.finished=new Date().toISOString();f.innerHTML="<b>Inspection complete.</b> The form was open for "+mins+" minutes.";save()}
+$("finish").onclick=finish;
+const cold=l=>{const m=parseFloat(l.mt),mn=parseFloat($("tmin").value);return(!isNaN(m)&&!isNaN(mn)&&m<mn)||l.st==="Placed – cold"||l.st==="Rejected"};
+const today=()=>{const n=new Date();return n.getFullYear()+"-"+String(n.getMonth()+1).padStart(2,"0")+"-"+String(n.getDate()).padStart(2,"0")};
+const crew=()=>{try{return JSON.parse(localStorage.getItem("pavCrew")||"[]")}catch(e){return[]}};
+function buildShouts(){const cr=crew();$("shouts").innerHTML=S.shouts.map((x,i)=>`<div class="so"><div class="g"><div><label>Who?</label><select data-si="${i}" data-sp="who"><option value="">Pick a crew member</option>${cr.map(n=>`<option${x.who===n?" selected":""}>${esc(n)}</option>`).join("")}<option${x.who==="Someone else"?" selected":""}>Someone else</option></select></div>${x.who==="Someone else"?`<div><label>Name</label><input data-si="${i}" data-sp="other" value="${esc(x.other||"")}"></div>`:""}</div><label style="margin-top:8px">What did they do?</label><textarea data-si="${i}" data-sp="why" placeholder="Be specific. What did you see?">${esc(x.why||"")}</textarea>${S.shouts.length>1?`<button class="btn sec noprint" data-srm="${i}" style="margin-top:6px">Remove</button>`:""}</div>`).join("")}
+$("addshout").onclick=()=>{S.shouts.push({who:"",why:""});buildShouts();save()};
+$("editcrew").onclick=()=>{const c=$("crewed");c.style.display=c.style.display==="none"?"block":"none";c.querySelector("textarea").value=crew().join("\n")};
+$("crewsave").onclick=()=>{const v=$("crewed").querySelector("textarea").value.split(/\n|,/).map(x=>x.trim()).filter(Boolean);try{localStorage.setItem("pavCrew",JSON.stringify(v))}catch(e){}$("crewed").style.display="none";buildShouts()};
+function buildWell(){$("wellchk").innerHTML=WELL.map((w,i)=>`<label class="wc"><input type="checkbox" data-w="${i}" ${S.well[i]?"checked":""}>${w}</label>`).join("")}
+load();if(!S.dateEdited)$("date").value=today();S.loads=S.loads||[];S.shouts=S.shouts||[];if(!S.shouts.length)S.shouts.push({who:"",why:""});if(!S.loads.length)S.loads.push({id:Date.now()+(uid++),st:"Placed OK",t:new Date().toTimeString().slice(0,5)});S.cs=S.cs||"";S.well=S.well||{};S.mode=S.mode||"quick";S.start=S.start||Date.now();buildWell();setMode();buildChk();buildReq();buildSpot();buildDly();buildLoads();buildCS();buildShouts();initSig();refresh();
+</script></body></html>
